@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Counter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        p {
+            font-size: 20px;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 80%;
+            max-width: 200px;
+        }
+
+        /* Dark mode styles */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #333;
+                color: #fff;
+            }
+            .container {
+                background-color: #444;
+            }
+        }
+
+        /* Custom dark mode */
+        body.night-mode {
+            background-color: #333;
+            color: #fff;
+        }
+        body.night-mode .container {
+            background-color: #444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Button Press Counter</h1>
+        <button id="countButton">Press Me!</button>
+        <button id="resetButton">Reset Count</button>
+        <p id="countDisplay">Button pressed: 0 times</p>
+        <input type="number" id="customCount" placeholder="Set count" />
+        <button id="setCountButton">Set Count</button>
+        <button id="toggleNightMode">Toggle Night Mode</button>
+    </div>
+    <script>
+        // Retrieve count from local storage or set to 0 if not found
+        let count = localStorage.getItem('buttonPressCount') ? parseInt(localStorage.getItem('buttonPressCount')) : 0;
+
+        // Update the displayed count
+        function updateDisplay() {
+            document.getElementById('countDisplay').innerText = `Button pressed: ${count} times`;
+        }
+
+        // Increment the count and update local storage
+        document.getElementById('countButton').addEventListener('click', () => {
+            count++;
+            localStorage.setItem('buttonPressCount', count);
+            updateDisplay();
+        });
+
+        // Reset the count
+        document.getElementById('resetButton').addEventListener('click', () => {
+            count = 0;
+            localStorage.setItem('buttonPressCount', count);
+            updateDisplay();
+        });
+
+        // Set the count from input box
+        document.getElementById('setCountButton').addEventListener('click', () => {
+            const inputValue = parseInt(document.getElementById('customCount').value);
+            if (!isNaN(inputValue) && inputValue >= 0) {
+                count = inputValue;
+                localStorage.setItem('buttonPressCount', count);
+                updateDisplay();
+                document.getElementById('customCount').value = ''; // Clear the input field
+            } else {
+                alert('Please enter a valid positive number.');
+            }
+        });
+
+        // Initialize display
+        updateDisplay();
+
+        // Night mode toggle
+        document.getElementById('toggleNightMode').addEventListener('click', () => {
+            document.body.classList.toggle('night-mode');
+        });
+    </script>
+</body>
+</html>
